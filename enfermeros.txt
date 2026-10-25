@@ -1,0 +1,12 @@
+ENF0001,41000001,Lionel,Messi,true
+ENF0002,41000002,Emiliano,Martínez,true
+ENF0003,41000003,Cristian,Romero,true
+ENF0004,41000004,Nicolás,Otamendi,true
+ENF0005,41000005,Lautaro,Martínez,true
+ENF0006,41000006,Nicolás,Tagliafico,true
+ENF0007,41000007,Rodrigo,De Paul,true
+ENF0008,41000008,Enzo,Fernández,true
+ENF0009,41000009,Julián,Álvarez,true
+ENF0010,41000010,Leandro,Paredes,true
+
+

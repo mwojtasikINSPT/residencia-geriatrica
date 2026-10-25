@@ -1,0 +1,15 @@
+RES0001,12000001,Jorge,Rafael Videla,true
+RES0002,12000002,Emilio,Massera,true
+RES0003,12000003,Leopoldo,Galtieri,true
+RES0004,12000004,Reynaldo,Bignone,true
+RES0005,12000005,Roberto,Viola,true
+RES0006,12000006,Jose,Lopez Rega,true
+RES0007,12000007,Alfredo,Astiz,true
+RES0008,12000008,Luciano,Benjamin Menendez,true
+RES0009,12000009,Antonio,Bussi,true
+RES0010,12000010,Domingo,Cavallo,true
+RES0011,12000011,Carlos,Menem,true
+RES0012,12000012,Fernando,De la Rua,true
+RES0013,12000013,Jose,Martinez de Hoz,true
+RES0014,12000014,Guillermo,Suarez Mason,true
+RES0015,12000015,Adolfo,Scilingo,true

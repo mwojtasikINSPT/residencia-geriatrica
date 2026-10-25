@@ -1,0 +1,40 @@
+package residenciageriatrica.controllers;
+
+import java.io.IOException;
+import java.util.List;
+import residenciageriatrica.dtos.PersonaDTO;
+import residenciageriatrica.services.PersonaService;
+
+public class PersonaController {
+
+    private final PersonaService personaService;
+
+    public PersonaController(String ruta) {
+        this.personaService = new PersonaService(ruta);
+    }
+
+    public List<PersonaDTO> listarPersonas() {
+        return personaService.listarPersonas();
+    }
+
+    public void agregarPersona(String dni, String nombre, String apellido)
+            throws IOException {
+        personaService.agregarPersona(dni, nombre, apellido);
+    }
+
+    public PersonaDTO buscarPorId(String id) {
+        return personaService.buscarPorId(id);
+    }
+
+    public PersonaDTO buscarPorDni(String dni) {
+        return personaService.buscarPorDni(dni);
+    }
+
+    public void actualizarPersona(PersonaDTO persona) throws IOException {
+        personaService.actualizarPersona(persona);
+    }
+
+    public void eliminarPersona(String id) throws IOException {
+        personaService.eliminarPersona(id);
+    }
+}
