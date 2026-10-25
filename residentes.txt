@@ -13,3 +13,4 @@ RES0012,12000012,Fernando,De la Rua,true
 RES0013,12000013,Jose,Martinez de Hoz,true
 RES0014,12000014,Guillermo,Suarez Mason,true
 RES0015,12000015,Adolfo,Scilingo,true
+RES0016,11222333,MIRTHA,LEGRAND,true

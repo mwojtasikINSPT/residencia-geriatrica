@@ -37,7 +37,7 @@ public class ReservaService {
             );
         }
 
-        HabitacionDTO habitacion = habitacionDAO.buscarPorCodigo(codHabitacion);
+        HabitacionDTO habitacion = habitacionDAO.buscarPorId(codHabitacion);
 
         if (habitacion == null) {
             throw new EntidadNoEncontradaException(
@@ -63,7 +63,7 @@ public class ReservaService {
             );
         }
 
-        List<String> ids = reservaDAO.leerTodas().stream()
+        List<String> ids = reservaDAO.listar().stream()
                 .map(ReservaDTO::getId)
                 .collect(Collectors.toList());
 
@@ -135,7 +135,7 @@ public class ReservaService {
     }
 
     public List<ReservaDTO> listarReservas() {
-        return reservaDAO.leerTodas().stream()
+        return reservaDAO.listar().stream()
                 .filter(ReservaDTO::isActivo)
                 .collect(Collectors.toList());
     }

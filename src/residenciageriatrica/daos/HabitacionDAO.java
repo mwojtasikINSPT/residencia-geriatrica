@@ -8,9 +8,10 @@ import java.util.stream.Collectors;
 import residenciageriatrica.dtos.HabitacionDTO;
 import residenciageriatrica.exceptions.EntidadDuplicadaException;
 import residenciageriatrica.exceptions.EntidadNoEncontradaException;
+import residenciageriatrica.interfaces.ICrud;
 import residenciageriatrica.models.Estado;
 
-public class HabitacionDAO {
+public class HabitacionDAO implements ICrud<HabitacionDTO, String> {
 
     private static final String FILE_PATH = "habitaciones.txt";
 
@@ -26,7 +27,8 @@ public class HabitacionDAO {
         }
     }
 
-    public List<HabitacionDTO> leerTodas() {
+    @Override
+    public List<HabitacionDTO> listar() {
         try {
             return Files.readAllLines(Paths.get(FILE_PATH))
                     .stream()
@@ -60,7 +62,8 @@ public class HabitacionDAO {
         }
     }
 
-    public void guardarTodas(List<HabitacionDTO> lista) throws IOException {
+    @Override
+    public void guardarAll(List<HabitacionDTO> lista) throws IOException {
         List<String> lineas = lista.stream()
                 .map(h -> String.join(",",
                         h.getCodHabitacion(),
@@ -78,8 +81,9 @@ public class HabitacionDAO {
         }
     }
 
+    @Override
     public void agregar(HabitacionDTO nueva) throws IOException {
-        List<HabitacionDTO> habitaciones = leerTodas();
+        List<HabitacionDTO> habitaciones = listar();
 
         boolean existe = habitaciones.stream()
                 .anyMatch(h -> h.getCodHabitacion()
@@ -92,11 +96,12 @@ public class HabitacionDAO {
         }
 
         habitaciones.add(nueva);
-        guardarTodas(habitaciones);
+        guardarAll(habitaciones);
     }
 
-    public HabitacionDTO buscarPorCodigo(String codigo) {
-        return leerTodas().stream()
+    @Override
+    public HabitacionDTO buscarPorId(String codigo) {
+        return listar().stream()
                 .filter(h -> h.getCodHabitacion().equals(codigo)
                         && h.isActivo())
                 .findFirst()
@@ -104,7 +109,7 @@ public class HabitacionDAO {
     }
 
     public void actualizarEstado(String codigo, Estado nuevoEstado) throws IOException {
-        List<HabitacionDTO> habitaciones = leerTodas();
+        List<HabitacionDTO> habitaciones = listar();
 
         for (int i = 0; i < habitaciones.size(); i++) {
             HabitacionDTO h = habitaciones.get(i);
@@ -118,7 +123,7 @@ public class HabitacionDAO {
                         )
                 );
 
-                guardarTodas(habitaciones);
+                guardarAll(habitaciones);
                 return;
             }
         }
@@ -127,9 +132,10 @@ public class HabitacionDAO {
                 "La habitación no existe o está inactiva"
         );
     }
-
+    
+    @Override
     public void eliminar(String codigo) throws IOException {
-        List<HabitacionDTO> habitaciones = leerTodas();
+        List<HabitacionDTO> habitaciones = listar();
 
         for (int i = 0; i < habitaciones.size(); i++) {
             HabitacionDTO h = habitaciones.get(i);
@@ -143,7 +149,7 @@ public class HabitacionDAO {
                         )
                 );
 
-                guardarTodas(habitaciones);
+                guardarAll(habitaciones);
                 return;
             }
         }

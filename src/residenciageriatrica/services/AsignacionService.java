@@ -35,7 +35,7 @@ public class AsignacionService {
             );
         }
 
-        if (habitacionDAO.buscarPorCodigo(codHabitacion) == null) {
+        if (habitacionDAO.buscarPorId(codHabitacion) == null) {
             throw new EntidadNoEncontradaException(
                     "La habitación no existe o está inactiva"
             );
@@ -47,7 +47,7 @@ public class AsignacionService {
             );
         }
 
-        List<String> ids = asignacionDAO.leerTodas().stream()
+        List<String> ids = asignacionDAO.listar().stream()
                 .map(AsignacionDTO::getId)
                 .collect(Collectors.toList());
 
@@ -80,7 +80,7 @@ public class AsignacionService {
     }
 
     public List<AsignacionDTO> listarAsignaciones() {
-        return asignacionDAO.leerTodas().stream()
+        return asignacionDAO.listar().stream()
                 .filter(AsignacionDTO::isActivo)
                 .collect(Collectors.toList());
     }

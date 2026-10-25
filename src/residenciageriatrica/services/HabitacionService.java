@@ -26,13 +26,13 @@ public class HabitacionService {
     }
 
     public List<HabitacionDTO> listarHabitaciones() {
-        return habitacionDAO.leerTodas().stream()
+        return habitacionDAO.listar().stream()
                 .filter(HabitacionDTO::isActivo)
                 .collect(Collectors.toList());
     }
 
     public void agregarHabitacion() throws IOException {
-        List<String> ids = habitacionDAO.leerTodas().stream()
+        List<String> ids = habitacionDAO.listar().stream()
                 .map(HabitacionDTO::getCodHabitacion)
                 .collect(Collectors.toList());
 
@@ -51,13 +51,13 @@ public class HabitacionService {
 
     public HabitacionDTO buscarPorCodigo(String codigo) {
         codigo = Validaciones.validarCodigo(codigo, "HAB");
-        return habitacionDAO.buscarPorCodigo(codigo);
+        return habitacionDAO.buscarPorId(codigo);
     }
 
     public void eliminarHabitacion(String codigo) throws IOException {
         codigo = Validaciones.validarCodigo(codigo, "HAB");
 
-        if (habitacionDAO.buscarPorCodigo(codigo) == null) {
+        if (habitacionDAO.buscarPorId(codigo) == null) {
             throw new OperacionNoPermitidaException(
                     "La habitación no existe o está inactiva"
             );

@@ -5,11 +5,12 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
+import residenciageriatrica.interfaces.ICrud;
 import residenciageriatrica.dtos.PersonaDTO;
 import residenciageriatrica.exceptions.EntidadDuplicadaException;
 import residenciageriatrica.exceptions.EntidadNoEncontradaException;
 
-public class PersonaDAO {
+public class PersonaDAO implements ICrud<PersonaDTO, String> {
 
     private final String ruta;
 
@@ -27,7 +28,8 @@ public class PersonaDAO {
         }
     }
 
-    public List<PersonaDTO> leerTodos() {
+    @Override
+    public List<PersonaDTO> listar() {
         try {
             return Files.readAllLines(Paths.get(ruta))
                     .stream()
@@ -64,7 +66,8 @@ public class PersonaDAO {
         }
     }
 
-    public void guardarTodos(List<PersonaDTO> lista) throws IOException {
+    @Override
+    public void guardarAll(List<PersonaDTO> lista) throws IOException {
         List<String> lineas = lista.stream()
                 .map(p -> String.join(",",
                 p.getId(),
@@ -83,7 +86,7 @@ public class PersonaDAO {
     }
 
     public void agregar(PersonaDTO nueva) throws IOException {
-        List<PersonaDTO> personas = leerTodos();
+        List<PersonaDTO> personas = listar();
 
         boolean existe = personas.stream()
                 .anyMatch(p -> p.getId().equals(nueva.getId())
@@ -96,11 +99,11 @@ public class PersonaDAO {
         }
 
         personas.add(nueva);
-        guardarTodos(personas);
+        guardarAll(personas);
     }
 
     public PersonaDTO buscarPorId(String id) {
-        return leerTodos()
+        return listar()
                 .stream()
                 .filter(persona -> persona.getId().equals(id) && persona.isActivo())
                 .findFirst()
@@ -108,7 +111,7 @@ public class PersonaDAO {
     }
 
     public PersonaDTO buscarPorDni(String dni) {
-        return leerTodos()
+        return listar()
                 .stream()
                 .filter(persona -> persona.getDni().equals(dni) && persona.isActivo())
                 .findFirst()
@@ -116,7 +119,7 @@ public class PersonaDAO {
     }
 
     public void eliminar(String id) throws IOException {
-        List<PersonaDTO> personas = leerTodos();
+        List<PersonaDTO> personas = listar();
 
         for (int i = 0; i < personas.size(); i++) {
             PersonaDTO persona = personas.get(i);
@@ -130,7 +133,7 @@ public class PersonaDAO {
                         false
                 ));
 
-                guardarTodos(personas);
+                guardarAll(personas);
                 return;
             }
         }
@@ -141,7 +144,7 @@ public class PersonaDAO {
     }
 
     public void actualizar(PersonaDTO actualizada) throws IOException {
-        List<PersonaDTO> personas = leerTodos();
+        List<PersonaDTO> personas = listar();
 
         for (int i = 0; i < personas.size(); i++) {
             PersonaDTO persona = personas.get(i);
@@ -166,7 +169,7 @@ public class PersonaDAO {
                         persona.isActivo()
                 ));
 
-                guardarTodos(personas);
+                guardarAll(personas);
                 return;
             }
         }
@@ -175,4 +178,6 @@ public class PersonaDAO {
                 "La persona no existe o está inactiva"
         );
     }
+
+    
 }

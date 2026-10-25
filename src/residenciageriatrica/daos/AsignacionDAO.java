@@ -8,8 +8,9 @@ import java.util.stream.Collectors;
 import residenciageriatrica.dtos.AsignacionDTO;
 import residenciageriatrica.exceptions.EntidadDuplicadaException;
 import residenciageriatrica.exceptions.EntidadNoEncontradaException;
+import residenciageriatrica.interfaces.ICrud;
 
-public class AsignacionDAO {
+public class AsignacionDAO implements ICrud<AsignacionDTO, String> {
 
     private static final String FILE_PATH = "asignaciones.txt";
 
@@ -25,7 +26,8 @@ public class AsignacionDAO {
         }
     }
 
-    public List<AsignacionDTO> leerTodas() {
+    @Override
+    public List<AsignacionDTO> listar() {
         try {
             return Files.readAllLines(Paths.get(FILE_PATH))
                     .stream()
@@ -61,7 +63,8 @@ public class AsignacionDAO {
         }
     }
 
-    public void guardarTodas(List<AsignacionDTO> lista) throws IOException {
+    @Override
+    public void guardarAll(List<AsignacionDTO> lista) throws IOException {
         List<String> lineas = lista.stream()
                 .map(a -> String.join(",",
                 a.getId(),
@@ -80,8 +83,9 @@ public class AsignacionDAO {
         }
     }
 
+    @Override
     public void agregar(AsignacionDTO nueva) throws IOException {
-        List<AsignacionDTO> asignaciones = leerTodas();
+        List<AsignacionDTO> asignaciones = listar();
 
         boolean idDuplicado = asignaciones.stream()
                 .anyMatch(a -> a.getId().equals(nueva.getId()));
@@ -103,18 +107,19 @@ public class AsignacionDAO {
         }
 
         asignaciones.add(nueva);
-        guardarTodas(asignaciones);
+        guardarAll(asignaciones);
     }
 
+    @Override
     public AsignacionDTO buscarPorId(String id) {
-        return leerTodas().stream()
+        return listar().stream()
                 .filter(a -> a.getId().equals(id) && a.isActivo())
                 .findFirst()
                 .orElse(null);
     }
 
     public AsignacionDTO buscarPorHabitacion(String codHabitacion) {
-        return leerTodas().stream()
+        return listar().stream()
                 .filter(a -> a.getCodHabitacion().equals(codHabitacion)
                 && a.isActivo())
                 .findFirst()
@@ -122,14 +127,15 @@ public class AsignacionDAO {
     }
 
     public List<AsignacionDTO> buscarPorEnfermero(String idEnfermero) {
-        return leerTodas().stream()
+        return listar().stream()
                 .filter(a -> a.getIdEnfermero().equals(idEnfermero)
                 && a.isActivo())
                 .collect(Collectors.toList());
     }
 
+    @Override
     public void eliminar(String codigo) throws IOException {
-        List<AsignacionDTO> asignaciones = leerTodas();
+        List<AsignacionDTO> asignaciones = listar();
         boolean encontrado = false;
 
         for (int i = 0; i < asignaciones.size(); i++) {
@@ -157,6 +163,6 @@ public class AsignacionDAO {
             );
         }
 
-        guardarTodas(asignaciones);
+        guardarAll(asignaciones);
     }
 }

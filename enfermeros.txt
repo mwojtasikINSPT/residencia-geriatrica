@@ -8,5 +8,4 @@ ENF0007,41000007,Rodrigo,De Paul,true
 ENF0008,41000008,Enzo,Fernández,true
 ENF0009,41000009,Julián,Álvarez,true
 ENF0010,41000010,Leandro,Paredes,true
-
-
+ENF0011,33444555,COPITO,WOJTASIK,true

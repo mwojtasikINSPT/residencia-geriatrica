@@ -63,7 +63,7 @@ public class PersonaService {
     }
 
     public List<PersonaDTO> listarPersonas() {
-        return personaDAO.leerTodos().stream()
+        return personaDAO.listar().stream()
                 .filter(PersonaDTO::isActivo)
                 .collect(Collectors.toList());
     }
@@ -75,7 +75,7 @@ public class PersonaService {
         nombre = Validaciones.validarTextoObligatorio(nombre, "nombre");
         apellido = Validaciones.validarTextoObligatorio(apellido, "apellido");
 
-        List<String> ids = personaDAO.leerTodos().stream()
+        List<String> ids = personaDAO.listar().stream()
                 .map(PersonaDTO::getId)
                 .collect(Collectors.toList());
 

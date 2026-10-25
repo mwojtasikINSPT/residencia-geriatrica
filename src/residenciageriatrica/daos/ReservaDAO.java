@@ -9,8 +9,9 @@ import residenciageriatrica.dtos.ReservaDTO;
 import residenciageriatrica.exceptions.EntidadDuplicadaException;
 import residenciageriatrica.exceptions.EntidadNoEncontradaException;
 import residenciageriatrica.exceptions.OperacionNoPermitidaException;
+import residenciageriatrica.interfaces.ICrud;
 
-public class ReservaDAO {
+public class ReservaDAO implements ICrud<ReservaDTO, String> {
 
     private static final String FILE_PATH = "reservas.txt";
 
@@ -26,7 +27,8 @@ public class ReservaDAO {
         }
     }
 
-    public List<ReservaDTO> leerTodas() {
+    @Override
+    public List<ReservaDTO> listar() {
         try {
             return Files.readAllLines(Paths.get(FILE_PATH))
                     .stream()
@@ -62,7 +64,8 @@ public class ReservaDAO {
         }
     }
 
-    public void guardarTodas(List<ReservaDTO> lista) throws IOException {
+    @Override
+    public void guardarAll(List<ReservaDTO> lista) throws IOException {
         List<String> lineas = lista.stream()
                 .map(reserva -> String.join(",",
                 reserva.getId(),
@@ -82,7 +85,7 @@ public class ReservaDAO {
     }
 
     public void agregar(ReservaDTO nuevaReserva) throws IOException {
-        List<ReservaDTO> reservas = leerTodas();
+        List<ReservaDTO> reservas = listar();
 
         boolean idDuplicado = reservas.stream()
                 .anyMatch(r -> r.getId().equals(nuevaReserva.getId()));
@@ -114,18 +117,18 @@ public class ReservaDAO {
         }
 
         reservas.add(nuevaReserva);
-        guardarTodas(reservas);
+        guardarAll(reservas);
     }
 
     public ReservaDTO buscarPorId(String id) {
-        return leerTodas().stream()
+        return listar().stream()
                 .filter(r -> r.getId().equals(id) && r.isActivo())
                 .findFirst()
                 .orElse(null);
     }
 
     public ReservaDTO buscarPorResidente(String idResidente) {
-        return leerTodas().stream()
+        return listar().stream()
                 .filter(r -> r.getIdResidente().equals(idResidente)
                 && r.isActivo())
                 .findFirst()
@@ -133,7 +136,7 @@ public class ReservaDAO {
     }
 
     public ReservaDTO buscarPorHabitacion(String codHabitacion) {
-        return leerTodas().stream()
+        return listar().stream()
                 .filter(r -> r.getCodHabitacion().equals(codHabitacion)
                 && r.isActivo())
                 .findFirst()
@@ -141,7 +144,7 @@ public class ReservaDAO {
     }
 
     public void eliminar(String codigo) throws IOException {
-        List<ReservaDTO> reservas = leerTodas();
+        List<ReservaDTO> reservas = listar();
 
         for (int i = 0; i < reservas.size(); i++) {
             ReservaDTO reserva = reservas.get(i);
@@ -158,7 +161,7 @@ public class ReservaDAO {
                         false
                 ));
 
-                guardarTodas(reservas);
+                guardarAll(reservas);
                 return;
             }
         }
@@ -169,7 +172,7 @@ public class ReservaDAO {
     }
 
     public void reactivar(String id) throws IOException {
-        List<ReservaDTO> reservas = leerTodas();
+        List<ReservaDTO> reservas = listar();
 
         for (int i = 0; i < reservas.size(); i++) {
             ReservaDTO reserva = reservas.get(i);
@@ -194,7 +197,7 @@ public class ReservaDAO {
                         true
                 ));
 
-                guardarTodas(reservas);
+                guardarAll(reservas);
                 return;
             }
         }
@@ -203,4 +206,5 @@ public class ReservaDAO {
                 "No existe una reserva inactiva con ese ID"
         );
     }
+
 }
