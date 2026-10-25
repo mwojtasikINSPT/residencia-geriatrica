@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.List;
 import residenciageriatrica.controllers.ReservaController;
 import residenciageriatrica.dtos.ReservaDTO;
+import residenciageriatrica.exceptions.EntidadNoEncontradaException;
+import residenciageriatrica.exceptions.OperacionNoPermitidaException;
 import residenciageriatrica.utils.ConsolaUtils;
 
 public class ReservaView {
@@ -67,12 +69,27 @@ public class ReservaView {
     }
 
     private void crear() throws IOException {
-        String idResidente = ConsolaUtils.leerTexto("ID del residente");
-        String codHabitacion = ConsolaUtils.leerTexto("Código de habitación");
+    String idResidente = ConsolaUtils.leerTexto("ID del residente");
 
-        controller.crearReserva(idResidente, codHabitacion);
-        ConsolaUtils.imprimirMensaje("Reserva creada correctamente.");
+    while (true) {
+        String codHabitacion = ConsolaUtils.leerTexto(
+                "Código de habitación (0 para cancelar)"
+        );
+
+        if (codHabitacion.equals("0")) {
+            ConsolaUtils.imprimirMensaje("Operación cancelada.");
+            return;
+        }
+
+        try {
+            String id = controller.crearReserva(idResidente, codHabitacion);
+            ConsolaUtils.imprimirRegistroCreado("Reserva", id);
+            return;
+        } catch (EntidadNoEncontradaException | OperacionNoPermitidaException e) {
+            ConsolaUtils.imprimirMensaje("ERROR: " + e.getMessage());
+        }
     }
+}
 
     private void listar() {
         List<ReservaDTO> reservas = controller.listarReservas();

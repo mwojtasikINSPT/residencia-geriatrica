@@ -17,9 +17,9 @@ public class HabitacionController {
         return habitacionService.listarHabitaciones();
     }
 
-    public void agregarHabitacion() throws IOException {
-        habitacionService.agregarHabitacion();
-    }
+    public String agregarHabitacion() throws IOException {
+    return habitacionService.agregarHabitacion();
+}
 
     public HabitacionDTO buscarPorCodigo(String codigo) {
         return habitacionService.buscarPorCodigo(codigo);

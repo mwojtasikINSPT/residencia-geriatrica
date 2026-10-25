@@ -68,7 +68,7 @@ public class PersonaService {
                 .collect(Collectors.toList());
     }
 
-    public void agregarPersona(String dni, String nombre, String apellido)
+    public String agregarPersona(String dni, String nombre, String apellido)
             throws IOException {
 
         dni = Validaciones.validarDni(dni);
@@ -90,6 +90,7 @@ public class PersonaService {
         );
 
         personaDAO.agregar(convertirADTO(persona));
+        return id;
     }
 
     public PersonaDTO buscarPorId(String id) {
@@ -128,9 +129,8 @@ public class PersonaService {
                 ReservaDAO reservaDAO = new ReservaDAO();
 
                 if (reservaDAO.buscarPorResidente(id) != null) {
-                    throw new OperacionNoPermitidaException(
-                            "No se puede eliminar el residente porque tiene una reserva activa"
-                    );
+                    ReservaService reservaService = new ReservaService();
+                    reservaService.eliminarReserva(id);
                 }
             }
 
@@ -144,7 +144,8 @@ public class PersonaService {
                 }
             }
 
-            default -> throw new OperacionNoPermitidaException(
+            default ->
+                throw new OperacionNoPermitidaException(
                         "Tipo de persona no reconocido"
                 );
         }
@@ -177,4 +178,9 @@ public class PersonaService {
 
         personaDAO.actualizar(convertirADTO(persona));
     }
+    
+    public void reactivarPersona(String id) throws IOException {
+    id = Validaciones.validarCodigo(id, prefijo);
+    personaDAO.reactivar(id);
+}
 }

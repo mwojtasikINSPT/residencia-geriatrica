@@ -17,9 +17,9 @@ public class PersonaController {
         return personaService.listarPersonas();
     }
 
-    public void agregarPersona(String dni, String nombre, String apellido)
+    public String agregarPersona(String dni, String nombre, String apellido)
             throws IOException {
-        personaService.agregarPersona(dni, nombre, apellido);
+        return personaService.agregarPersona(dni, nombre, apellido);
     }
 
     public PersonaDTO buscarPorId(String id) {
@@ -36,5 +36,9 @@ public class PersonaController {
 
     public void eliminarPersona(String id) throws IOException {
         personaService.eliminarPersona(id);
+    }
+
+    public void reactivarPersona(String id) throws IOException {
+        personaService.reactivarPersona(id);
     }
 }

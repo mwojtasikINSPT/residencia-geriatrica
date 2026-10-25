@@ -92,6 +92,9 @@ public class PersonaDAO implements ICrud<PersonaDTO, String> {
                 .anyMatch(p -> p.getId().equals(nueva.getId())
                 || p.getDni().equals(nueva.getDni()));
 
+        //Lineas debug temporal
+        //System.out.println("ID generado: " + nueva.getId());
+        //System.out.println("DNI ingresado: " + nueva.getDni());
         if (existe) {
             throw new EntidadDuplicadaException(
                     "Ya existe una persona con ese ID o DNI"
@@ -179,5 +182,29 @@ public class PersonaDAO implements ICrud<PersonaDTO, String> {
         );
     }
 
-    
+    public void reactivar(String id) throws IOException {
+        List<PersonaDTO> personas = listar();
+
+        for (int i = 0; i < personas.size(); i++) {
+            PersonaDTO persona = personas.get(i);
+
+            if (persona.getId().equals(id) && !persona.isActivo()) {
+                personas.set(i, new PersonaDTO(
+                        persona.getId(),
+                        persona.getDni(),
+                        persona.getNombre(),
+                        persona.getApellido(),
+                        true
+                ));
+
+                guardarAll(personas);
+                return;
+            }
+        }
+
+        throw new EntidadNoEncontradaException(
+                "La persona no existe o ya está activa"
+        );
+    }
+
 }

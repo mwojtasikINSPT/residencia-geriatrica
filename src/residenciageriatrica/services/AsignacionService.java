@@ -25,7 +25,7 @@ public class AsignacionService {
         this.enfermeroDAO = new PersonaDAO("enfermeros.txt");
     }
 
-    public void crearAsignacion(String idEnfermero, String codHabitacion) throws IOException {
+    public String crearAsignacion(String idEnfermero, String codHabitacion) throws IOException {
         idEnfermero = Validaciones.validarCodigo(idEnfermero, "ENF");
         codHabitacion = Validaciones.validarCodigo(codHabitacion, "HAB");
 
@@ -63,6 +63,7 @@ public class AsignacionService {
         );
 
         asignacionDAO.agregar(nueva);
+        return id;
     }
 
     public void eliminarAsignacion(String codigo) throws IOException {
@@ -101,5 +102,69 @@ public class AsignacionService {
         return asignacionDAO.buscarPorEnfermero(
                 Validaciones.validarCodigo(idEnfermero, "ENF")
         );
+    }
+
+    public String reasignarHabitacion(String codHabitacion, String idNuevoEnfermero)
+            throws IOException {
+
+        codHabitacion = Validaciones.validarCodigo(codHabitacion, "HAB");
+        idNuevoEnfermero = Validaciones.validarCodigo(idNuevoEnfermero, "ENF");
+
+        if (enfermeroDAO.buscarPorId(idNuevoEnfermero) == null) {
+            throw new EntidadNoEncontradaException(
+                    "El nuevo enfermero no existe o está inactivo"
+            );
+        }
+
+        if (habitacionDAO.buscarPorId(codHabitacion) == null) {
+            throw new EntidadNoEncontradaException(
+                    "La habitación no existe o está inactiva"
+            );
+        }
+
+        AsignacionDTO anterior = asignacionDAO.buscarPorHabitacion(codHabitacion);
+
+        if (anterior == null) {
+            throw new EntidadNoEncontradaException(
+                    "La habitación no tiene un enfermero asignado"
+            );
+        }
+
+        if (anterior.getIdEnfermero().equals(idNuevoEnfermero)) {
+            throw new OperacionNoPermitidaException(
+                    "La habitación ya está asignada a ese enfermero"
+            );
+        }
+
+        List<AsignacionDTO> asignaciones = asignacionDAO.listar();
+
+        String nuevoId = GeneradorCodigo.generarSiguienteId(
+                asignaciones.stream()
+                        .map(AsignacionDTO::getId)
+                        .collect(Collectors.toList()),
+                "ASI"
+        );
+
+        List<AsignacionDTO> actualizadas = asignaciones.stream()
+                .map(a -> a.getId().equals(anterior.getId())
+                ? new AsignacionDTO(
+                        a.getId(),
+                        a.getIdEnfermero(),
+                        a.getCodHabitacion(),
+                        false
+                )
+                : a)
+                .collect(Collectors.toList());
+
+        actualizadas.add(new AsignacionDTO(
+                nuevoId,
+                idNuevoEnfermero,
+                codHabitacion,
+                true
+        ));
+
+        asignacionDAO.guardarAll(actualizadas);
+
+        return nuevoId;
     }
 }

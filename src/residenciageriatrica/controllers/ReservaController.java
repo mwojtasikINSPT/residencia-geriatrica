@@ -13,9 +13,8 @@ public class ReservaController {
         this.reservaService = new ReservaService();
     }
 
-    public void crearReserva(String idResidente, String codHabitacion)
-            throws IOException {
-        reservaService.crearReserva(idResidente, codHabitacion);
+    public String crearReserva(String idResidente, String codHabitacion) throws IOException {
+        return reservaService.crearReserva(idResidente, codHabitacion);
     }
 
     public void eliminarReserva(String codigo) throws IOException {

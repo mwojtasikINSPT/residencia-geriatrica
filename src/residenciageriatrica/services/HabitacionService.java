@@ -31,7 +31,7 @@ public class HabitacionService {
                 .collect(Collectors.toList());
     }
 
-    public void agregarHabitacion() throws IOException {
+    public String agregarHabitacion() throws IOException {
         List<String> ids = habitacionDAO.listar().stream()
                 .map(HabitacionDTO::getCodHabitacion)
                 .collect(Collectors.toList());
@@ -47,6 +47,7 @@ public class HabitacionService {
         );
 
         habitacionDAO.agregar(nueva);
+        return codigo;
     }
 
     public HabitacionDTO buscarPorCodigo(String codigo) {

@@ -26,6 +26,7 @@ public class AsignacionView {
                     "4. Buscar por código de habitación",
                     "5. Buscar por ID de enfermero",
                     "6. Cancelar asignación",
+                    "7. Reasignar habitación",
                     "0. Volver"
             );
 
@@ -51,6 +52,9 @@ public class AsignacionView {
                     case 6:
                         cancelar();
                         break;
+                    case 7:
+                        reasignar();
+                        break;
                     case 0:
                         break;
                     default:
@@ -69,8 +73,8 @@ public class AsignacionView {
         String idEnfermero = ConsolaUtils.leerTexto("ID del enfermero");
         String codHabitacion = ConsolaUtils.leerTexto("Código de habitación");
 
-        controller.crearAsignacion(idEnfermero, codHabitacion);
-        ConsolaUtils.imprimirMensaje("Asignación creada correctamente.");
+        String id = controller.crearAsignacion(idEnfermero, codHabitacion);
+        ConsolaUtils.imprimirRegistroCreado("Asignación", id);
     }
 
     private void listar() {
@@ -184,6 +188,17 @@ public class AsignacionView {
                 "ID: " + asignacion.getId()
                 + " | Enfermero: " + asignacion.getIdEnfermero()
                 + " | Habitación: " + asignacion.getCodHabitacion()
+        );
+    }
+
+    private void reasignar() throws IOException {
+        String codHabitacion = ConsolaUtils.leerTexto("Código de habitación");
+        String idEnfermero = ConsolaUtils.leerTexto("ID del nuevo enfermero");
+
+        String id = controller.reasignarHabitacion(codHabitacion, idEnfermero);
+
+        ConsolaUtils.imprimirMensaje(
+                "Habitación reasignada correctamente. Nueva asignación: " + id
         );
     }
 }

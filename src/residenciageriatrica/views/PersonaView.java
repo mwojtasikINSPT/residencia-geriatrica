@@ -27,6 +27,7 @@ public class PersonaView {
                     "4. Buscar por DNI",
                     "5. Modificar",
                     "6. Eliminar",
+                    "7. Reactivar",
                     "0. Volver"
             );
 
@@ -52,6 +53,9 @@ public class PersonaView {
                     case 6:
                         eliminar();
                         break;
+                    case 7:
+                        reactivar();
+                        break;
                     case 0:
                         break;
                     default:
@@ -72,8 +76,8 @@ public class PersonaView {
         String nombre = ConsolaUtils.leerTexto("Nombre");
         String apellido = ConsolaUtils.leerTexto("Apellido");
 
-        controller.agregarPersona(dni, nombre, apellido);
-        ConsolaUtils.imprimirMensaje("Registro agregado correctamente.");
+        String id = controller.agregarPersona(dni, nombre, apellido);
+        ConsolaUtils.imprimirRegistroCreado("Persona", id);
     }
 
     private void listar() {
@@ -114,6 +118,18 @@ public class PersonaView {
         String dni = ConsolaUtils.leerTexto("Nuevo DNI");
         String nombre = ConsolaUtils.leerTexto("Nuevo nombre");
         String apellido = ConsolaUtils.leerTexto("Nuevo apellido");
+
+        if (dni.isEmpty()) {
+            dni = actual.getDni();
+        }
+
+        if (nombre.isEmpty()) {
+            nombre = actual.getNombre();
+        }
+
+        if (apellido.isEmpty()) {
+            apellido = actual.getApellido();
+        }
 
         PersonaDTO actualizado = new PersonaDTO(
                 actual.getId(),
@@ -159,5 +175,13 @@ public class PersonaView {
                 + " | Nombre: " + persona.getNombre()
                 + " | Apellido: " + persona.getApellido()
         );
+    }
+
+    private void reactivar() throws IOException {
+        String id = ConsolaUtils.leerTexto("ID de la persona a reactivar");
+
+        controller.reactivarPersona(id);
+
+        ConsolaUtils.imprimirMensaje("Persona reactivada correctamente.");
     }
 }

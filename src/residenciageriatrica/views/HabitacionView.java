@@ -59,8 +59,8 @@ public class HabitacionView {
     }
 
     private void agregar() throws IOException {
-        controller.agregarHabitacion();
-        ConsolaUtils.imprimirMensaje("Habitación agregada correctamente.");
+        String codigo = controller.agregarHabitacion();
+        ConsolaUtils.imprimirRegistroCreado("Habitación", codigo);
     }
 
     private void listar() {

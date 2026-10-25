@@ -13,9 +13,8 @@ public class AsignacionController {
         this.asignacionService = new AsignacionService();
     }
 
-    public void crearAsignacion(String idEnfermero, String codHabitacion)
-            throws IOException {
-        asignacionService.crearAsignacion(idEnfermero, codHabitacion);
+    public String crearAsignacion(String idEnfermero, String codHabitacion) throws IOException {
+        return asignacionService.crearAsignacion(idEnfermero, codHabitacion);
     }
 
     public void eliminarAsignacion(String codigo) throws IOException {
@@ -36,5 +35,10 @@ public class AsignacionController {
 
     public List<AsignacionDTO> buscarAsignacionesPorEnfermero(String idEnfermero) {
         return asignacionService.buscarAsignacionesPorEnfermero(idEnfermero);
+    }
+
+    public String reasignarHabitacion(String codHabitacion, String idNuevoEnfermero)
+            throws IOException {
+        return asignacionService.reasignarHabitacion(codHabitacion, idNuevoEnfermero);
     }
 }

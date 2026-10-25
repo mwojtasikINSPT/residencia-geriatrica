@@ -68,4 +68,8 @@ public final class ConsolaUtils {
     public static void pausar() {
         leerTexto("Presioná ENTER para continuar...");
     }
+
+    public static void imprimirRegistroCreado(String tipo, String id) {
+        imprimirMensaje(tipo + " creada correctamente. ID asignado: " + id);
+    }
 }

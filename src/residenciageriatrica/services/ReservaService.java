@@ -27,7 +27,7 @@ public class ReservaService {
         this.residenteDAO = new PersonaDAO("residentes.txt");
     }
 
-    public void crearReserva(String idResidente, String codHabitacion) throws IOException {
+    public String crearReserva(String idResidente, String codHabitacion) throws IOException {
         idResidente = Validaciones.validarCodigo(idResidente, "RES");
         codHabitacion = Validaciones.validarCodigo(codHabitacion, "HAB");
 
@@ -91,6 +91,7 @@ public class ReservaService {
 
             throw e;
         }
+        return id;
     }
 
     public void eliminarReserva(String codigo) throws IOException {
